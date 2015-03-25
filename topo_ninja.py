@@ -19,15 +19,17 @@ print "Found", len(counties), "counties in the dataset"
 # the ids of each county to strings. If keeps only those counties whose ids
 # start with the characters '37'.
 # 
-# This is exactly the same as this code, but much faster and easier to write:
+nc = [ c for c in counties if str(c['id']).startswith('37') ]
+print "Found", len(nc), "counties in NC."
+
+# That list comprehension is exactly the same as this code, but much faster and
+# easier to write:
 # 
 # nc = []
 # for c in counties:
 #   string_id = str(c['id'])
 #   if string_id.startswith('37'):
 #     nc.append(c)
-nc = [ c for c in counties if str(c['id']).startswith('37') ]
-print "Found", len(nc), "counties in NC."
 
 # Do the same for South Carolina.
 sc = [ c for c in counties if str(c['id']).startswith('45') ]
