@@ -1,4 +1,6 @@
 <!DOCTYPE html>
+<html>
+<head>
 <meta charset="utf-8">
 <style>
 
@@ -12,8 +14,16 @@ path:hover {
   fill: blue;
 }
 
+#map{
+  border:2px solid red;
+}
+
 </style>
+</head>
 <body>
+
+  <div id="map">
+  </div>
 <script src="http://d3js.org/d3.v3.min.js"></script>
 <script src="http://d3js.org/topojson.v1.min.js"></script>
 <script>
@@ -21,9 +31,14 @@ path:hover {
 var width = 960,
     height = 500;
 
-var path = d3.geo.path();
+var projection = d3.geo.albers()
+    .scale(5000)
+    .translate([ -550, -20]);
 
-var svg = d3.select("body").append("svg")
+var path = d3.geo.path()
+    .projection(projection);;
+
+var svg = d3.select("#map").append("svg")
     .attr("width", width)
     .attr("height", height);
 
@@ -35,3 +50,5 @@ d3.json("nc_sc.json", function(error, topology) {
 });
 
 </script>
+</body>
+</html>
