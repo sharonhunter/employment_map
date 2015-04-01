@@ -4,15 +4,21 @@
 <meta charset="utf-8">
 <style>
 
-path {
+path.counties {
   fill: #ccc;
   stroke: #fff;
   stroke-width: .5px;
 }
 
-path:hover {
-  fill: blue;
+path.states {
+  fill: transparent;
+  stroke:#000;
+  stroke-width: 3px;
 }
+
+/*path:hover {
+  fill: blue;
+}*/
 
 #map{
   border:2px solid red;
@@ -47,6 +53,12 @@ d3.json("nc_sc.json", function(error, topology) {
       .data(topojson.feature(topology, topology.objects.counties).features)
     .enter().append("path")
     .classed('counties', true)
+      .attr("d", path);
+
+  svg.selectAll("path.states")
+      .data(topojson.feature(topology, topology.objects.states).features)
+    .enter().append("path")
+    .classed('states', true)
       .attr("d", path);
 });
 

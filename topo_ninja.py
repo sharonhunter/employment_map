@@ -38,6 +38,21 @@ print "Found", len(sc), "counties in SC."
 # Replace the list of counties in the JSON object with our filtered list.
 j['objects']['counties']['geometries'] = nc + sc
 
+states = j['objects']['states']['geometries']
+print "Found", len(states), "states in the dataset"
+
+#new_states =[]
+#for s in range(40, 41):
+	#new_states.append(states[s])
+	#print "Added state", s
+
+#print new_states
+nc = states[40]
+
+sc = states[43]
+
+j['objects']['states']['geometries'] = [nc, sc]
+
 # Save the JSON object back to disk with a new name.
 content = json.dumps(j)
-open("nc_and_sc.json", "w").write(content)
+open("nc_sc.json", "w").write(content)
