@@ -43,9 +43,10 @@ var svg = d3.select("#map").append("svg")
     .attr("height", height);
 
 d3.json("nc_sc.json", function(error, topology) {
-  svg.selectAll("path")
+  svg.selectAll("path.counties")
       .data(topojson.feature(topology, topology.objects.counties).features)
     .enter().append("path")
+    .classed('counties', true)
       .attr("d", path);
 });
 
