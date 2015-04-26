@@ -54,7 +54,7 @@ var projection = d3.geo.albers()
 // refer to http://bl.ocks.org/mbostock/3306362
 var color = d3.scale.threshold()
     .domain([.02, .04, .06, .08, .10, .12, .14, .16, .18, .20, .22, .24])
-    .range(['#8b0000','#b61c38','#d64561','#ee7085','#fd9da2','#ffcdbb','#ffffe0','#c0ebac','#93d184','#6db662','#4b9a42','#2b7f23','#006400']);
+    .range(['#006400','#2b7f23','#4b9a42','#6db662','#93d184','#c0ebac','#ffffe0','#ffcdbb','#fd9da2','#ee7085','#d64561','#b61c38','#8b0000']);
 
 var path = d3.geo.path()
     .projection(projection);;
