@@ -21,8 +21,13 @@ path.states {
   fill: blue;
 }
 
-#map{
+#map {
   border:2px solid red;
+}
+
+#slider {
+  width: 60%;
+  margin: 0px auto;
 }
 
 </style>
@@ -54,6 +59,8 @@ var svg = d3.select("#map").append("svg")
 
 d3.select('#slider').call(
     d3.slider()
+      // TODO(shunter): Figure out a way to make the .5 tick marks disappear
+      // regardless of what size the screen is.
       .axis(true)
       .min(2006)
       .max(2014)
