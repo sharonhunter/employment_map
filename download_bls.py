@@ -128,4 +128,4 @@ if __name__ == '__main__':
 
     # Finally, dump all the data into a single JSON file.
     json_data = json.dumps(all_county_data)
-    open('county_unemployment_data.json', 'w').write(json_data)
+    open('unemployment_data.json', 'w').write(json_data)
