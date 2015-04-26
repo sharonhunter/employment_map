@@ -50,6 +50,12 @@ var projection = d3.geo.albers()
     .scale(5000)
     .translate([ -550, -20]);
 
+// adds threshold-type quantization with 12 2% data ranges and 13 colors
+// refer to http://bl.ocks.org/mbostock/3306362
+var color = d3.scale.threshold()
+    .domain([.02, .04, .06, .08, .10, .12, .14, .16, .18, .20, .22, .24])
+    .range(['#8b0000','#b61c38','#d64561','#ee7085','#fd9da2','#ffcdbb','#ffffe0','#c0ebac','#93d184','#6db662','#4b9a42','#2b7f23','#006400']);
+
 var path = d3.geo.path()
     .projection(projection);;
 
@@ -76,11 +82,13 @@ queue()
     .await(allDataLoaded);
 
 function allDataLoaded(error, topology, unemployment) {
+
   svg.selectAll("path.counties")
       .data(topojson.feature(topology, topology.objects.counties).features)
     .enter().append("path")
     .classed('counties', true)
-      .attr("d", path);
+      .attr("d", path)
+      .style("fill", color);
 
   svg.selectAll("path.states")
       .data(topojson.feature(topology, topology.objects.states).features)
@@ -88,6 +96,8 @@ function allDataLoaded(error, topology, unemployment) {
     .classed('states', true)
       .attr("d", path);
 }
+
+allDataLoaded();
 
 </script>
 </body>
