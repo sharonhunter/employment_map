@@ -17,14 +17,6 @@ path.states {
   stroke-width: 1px;
 }
 
-.counties:hover {
-  fill: blue;
-}
-
-#map {
-  border:2px solid red;
-}
-
 #slider {
   width: 60%;
   margin: 0px auto;
@@ -36,6 +28,7 @@ path.states {
 
 <div id="map"></div>
 <div id="slider"></div>
+<button type="button" id="animate_map"> Animate </button>
 
 <script src="http://d3js.org/d3.v3.min.js"></script>
 <script src="http://d3js.org/topojson.v1.min.js"></script>
@@ -71,8 +64,6 @@ function convertToYearAndMonth(decimalDate){
 }
 
 window.yearAndMonth = [2006, 1];
-
-
 
 queue()
     .defer(d3.json, "nc_sc_geo.json")          // The geo data
@@ -131,6 +122,25 @@ d3.select('#slider').call(
         redrawMap();
       })
 );
+
+d3.select("#animate_map").on("click", function(evt, value) {
+  window.animationTimer = setInterval(animateStep, 250);
+});
+
+function animateStep(){
+  
+  window.yearAndMonth[1] += 1;
+  if (window.yearAndMonth[1] === 13) {
+    window.yearAndMonth[0] += 1;
+    window.yearAndMonth[1] = 1; 
+  }
+  if (window.yearAndMonth[0] === 2015 && window.yearAndMonth[1] === 1) {
+    console.log("if stmt called");
+    clearInterval(window.animationTimer);
+    return;
+  }
+  redrawMap();
+}
 
 </script>
 </body>
