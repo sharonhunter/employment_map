@@ -57,7 +57,7 @@ var color = d3.scale.threshold()
     .range(['#006400','#2b7f23','#4b9a42','#6db662','#93d184','#c0ebac','#ffffe0','#ffcdbb','#fd9da2','#ee7085','#d64561','#b61c38','#8b0000']);
 
 var path = d3.geo.path()
-    .projection(projection);;
+    .projection(projection);
 
 var svg = d3.select("#map").append("svg")
     .attr("width", width)
@@ -83,12 +83,16 @@ queue()
 
 function allDataLoaded(error, topology, unemployment) {
 
+  function getCountyColor(county) {
+    return color(.06);
+  }
+
   svg.selectAll("path.counties")
       .data(topojson.feature(topology, topology.objects.counties).features)
     .enter().append("path")
     .classed('counties', true)
       .attr("d", path)
-      .style("fill", color);
+      .style("fill", getCountyColor);
 
   svg.selectAll("path.states")
       .data(topojson.feature(topology, topology.objects.states).features)
@@ -97,7 +101,7 @@ function allDataLoaded(error, topology, unemployment) {
       .attr("d", path);
 }
 
-allDataLoaded();
+//allDataLoaded();
 
 </script>
 </body>
