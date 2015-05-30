@@ -53,7 +53,7 @@ var projection = d3.geo.albers()
 // adds threshold-type quantization with 12 2% data ranges and 13 colors
 // refer to http://bl.ocks.org/mbostock/3306362
 var color = d3.scale.threshold()
-    .domain([.02, .04, .06, .08, .10, .12, .14, .16, .18, .20, .22, .24])
+    .domain([2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24])
     .range(['#006400','#2b7f23','#4b9a42','#6db662','#93d184','#c0ebac','#ffffe0','#ffcdbb','#fd9da2','#ee7085','#d64561','#b61c38','#8b0000']);
 
 var path = d3.geo.path()
@@ -111,11 +111,9 @@ function redrawMap(){
     for(x in unemployment[county.id]){
       var element = unemployment[county.id][x];
       if (element.year === window.yearAndMonth[0] && element.month === window.yearAndMonth[1]){
-         console.log(element);
+         return color(element.value);
       }
     }
-    return color(.06);
-
   }
   svg.selectAll("path.counties").style("fill", getCountyColor);
 }
