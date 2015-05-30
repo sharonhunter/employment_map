@@ -70,6 +70,56 @@ function convertToYearAndMonth(decimalDate){
   return array;
 }
 
+window.yearAndMonth = [2006, 1];
+
+
+
+queue()
+    .defer(d3.json, "nc_sc_geo.json")          // The geo data
+    .defer(d3.json, "unemployment_data.json")  // The unemployment data
+    .await(allDataLoaded);
+
+
+function allDataLoaded(error, topology, unemployment) {
+  window.topology = topology;
+  window.unemployment = unemployment;
+  createMap();
+  redrawMap();
+}
+
+function createMap(){
+  svg.selectAll("path.counties")
+      .data(topojson.feature(topology, topology.objects.counties).features)
+    .enter().append("path")
+    .classed('counties', true)
+      .attr("d", path);
+      //.style("fill", getCountyColor);
+
+  svg.selectAll("path.states")
+      .data(topojson.feature(topology, topology.objects.states).features)
+    .enter().append("path")
+    .classed('states', true)
+      .attr("d", path);
+}
+
+function redrawMap(){
+
+  function getCountyColor(county) {
+    //debugger;
+    //console.log(county.id);
+    //console.log(window.yearAndMonth);
+    for(x in unemployment[county.id]){
+      var element = unemployment[county.id][x];
+      if (element.year === window.yearAndMonth[0] && element.month === window.yearAndMonth[1]){
+         console.log(element);
+      }
+    }
+    return color(.06);
+
+  }
+  svg.selectAll("path.counties").style("fill", getCountyColor);
+}
+
 d3.select('#slider').call(
     d3.slider()
       // TODO(shunter): Figure out a way to make the .5 tick marks disappear
@@ -79,37 +129,10 @@ d3.select('#slider').call(
       .max(2014)
       .step(1.0/12.0)
       .on("slide", function(evt, value) {
-        var yearAndMonth = convertToYearAndMonth(value);
-        console.log(yearAndMonth);
+        window.yearAndMonth = convertToYearAndMonth(value);
+        redrawMap();
       })
 );
-
-queue()
-    .defer(d3.json, "nc_sc_geo.json")          // The geo data
-    .defer(d3.json, "unemployment_data.json")  // The unemployment data
-    .await(allDataLoaded);
-
-function allDataLoaded(error, topology, unemployment) {
-
-  function getCountyColor(county) {
-    return color(.06);
-  }
-
-  svg.selectAll("path.counties")
-      .data(topojson.feature(topology, topology.objects.counties).features)
-    .enter().append("path")
-    .classed('counties', true)
-      .attr("d", path)
-      .style("fill", getCountyColor);
-
-  svg.selectAll("path.states")
-      .data(topojson.feature(topology, topology.objects.states).features)
-    .enter().append("path")
-    .classed('states', true)
-      .attr("d", path);
-}
-
-//allDataLoaded();
 
 </script>
 </body>
