@@ -5,6 +5,31 @@
 <link rel="stylesheet" href="css/d3.slider.css" />  
 <style>
 
+#map_container {
+  width:100%;
+  border:2px solid green;
+  display:block;
+
+}
+
+#map_key {
+  display:inline-block;
+}
+
+
+#map {
+  width:85%;
+  display:block;
+  margin-left:auto;
+  margin-right:auto;
+  border:2px solid red;
+}
+
+#animate_map {
+  padding:10px 35px;
+  border-radius:3px;
+}
+
 path.counties {
   fill: #ccc;
   stroke: #fff;
@@ -18,17 +43,23 @@ path.states {
 }
 
 #slider {
-  width: 60%;
-  margin: 0px auto;
+  width:650px;
+  margin:0px auto;
+  border:2px solid purple;
 }
 
 </style>
 </head>
 <body>
-
-<div id="map"></div>
+<div id="map_container">
+<div id="map">
+  <div id="map_key">
+    <img src="/map_key_only.png" />
+    </div>
+</div>
 <div id="slider"></div>
 <button type="button" id="animate_map"> Animate </button>
+</div>
 
 <script src="http://d3js.org/d3.v3.min.js"></script>
 <script src="http://d3js.org/topojson.v1.min.js"></script>
@@ -36,18 +67,19 @@ path.states {
 <script src="js/d3.slider.js"></script>
 <script>
 
-var width = 960,
+var width = 860,
     height = 500;
 
 var projection = d3.geo.albers()
     .scale(5000)
-    .translate([ -550, -20]);
+    .translate([ -800, -20]);
 
 // adds threshold-type quantization with 12 2% data ranges and 13 colors
 // refer to http://bl.ocks.org/mbostock/3306362
 var color = d3.scale.threshold()
     .domain([2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24])
-    .range(['#006400','#2b7f23','#4b9a42','#6db662','#93d184','#c0ebac','#ffffe0','#ffcdbb','#fd9da2','#ee7085','#d64561','#b61c38','#8b0000']);
+    // (original) .range(['#006400','#2b7f23','#4b9a42','#6db662','#93d184','#c0ebac','#ffffe0','#ffcdbb','#fd9da2','#ee7085','#d64561','#b61c38','#8b0000']);
+    .range(['#006400', '#4e8f3e', '#87bc74', '#c0ebac','#ffe6e6','#ffc5d3','#ffa5bc','#f884a3','#ec6588','#db476b','#c62a4c','#ab0f2a','#8b0000']);
 
 var path = d3.geo.path()
     .projection(projection);
