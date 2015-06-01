@@ -2,7 +2,8 @@
 <html>
 <head>
 <meta charset="utf-8">
-<link rel="stylesheet" href="css/d3.slider.css" />  
+<link rel="stylesheet" href="css/d3.slider.css" /> 
+<link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'> 
 <style>
 
 #map_container {
@@ -10,7 +11,18 @@
   /*border:2px solid green;*/
   postion:relative;
 
+
+
 }
+
+#map_info {
+  font-family:Roboto, sans-serif;
+  margin:0px auto;
+  background-color:#fff;
+  color:#555;
+}
+
+#map_info p { line-height: 1.4em; }
 
 #map {
   width:960px;
@@ -19,6 +31,7 @@
   margin-right:auto;
   /*border:2px solid red;*/
   position:relative;
+  
 }
 
 #map_key {
@@ -33,6 +46,9 @@
   position:absolute;
   bottom:-26px;
   left:0px;
+  background-color:#87bc74;
+  color:#fff;
+  font-size:12px;
 
 }
 
@@ -51,25 +67,35 @@ path.states {
 #slider {
   width:650px;
   margin:0px auto 40px auto;
+  background-color:#888;
 }
 
 </style>
 </head>
 <body>
   <div id="map_container">
+    
+    
     <div id="map">
+      <div id="map_info">
+      <h1>d3.js : Unemployment Before and After 2008 Recession</h1>
+      <h2>North and South Carolina, 2006 - 2014</h2>
+      <p>This map shows the unemployment rates for each county for the years before, during, and after the 2008 recession.</p>
+      <p>From 2000 until 2006 (prior to the recession), unemployment ranged from a low of 3.3% in North Carolina and 3.7% in South Carolina, <br />to a high of 6.9% for North Carolina and a high of 7.0% for South Carolina.</p>
+      <p>The rates shown on the map range from an overall low of 2.2% through an overall high of 23.5% during the period from 2006 - 2014.</p> 
+      <p>* Data downloaded from Bureau of Labor Statistics, 2006 - 2014. * </p>
+
+    </div>
       <div id="map_key">
         <!-- <img src="/map_key_only.png" /> -->
         <img src="/map_key_label.png" />
       </div>
-      <button type="button" id="animate_map">Animate Data</button>
+      <button type="button" id="animate_map">ANIMATE DATA</button>
     </div>
     
     <div id="slider"></div>
-    
-      
-    
-</div>
+
+  </div>
 
 <script src="http://d3js.org/d3.v3.min.js"></script>
 <script src="http://d3js.org/topojson.v1.min.js"></script>
