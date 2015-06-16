@@ -1,207 +1,39 @@
 <!DOCTYPE html>
 <html>
-<head>
-<meta charset="utf-8">
-<link rel="stylesheet" href="css/d3.slider.css" /> 
-<link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'> 
-<style>
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="css/d3.slider.css" /> 
+    <link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'> 
+    <link rel="stylesheet" href="css/map.css" />
+  </head>
+  <body>
+    <div id="map_container">
+      <div id="map">
+        <div id="map_info">
+        <h1>d3.js : Unemployment Before and After 2008 Recession</h1>
+        <h2>North and South Carolina, 2006 - 2014</h2>
+        <p>This map shows the unemployment rates for each county for the years before, during, and after the 2008 recession.</p>
+        <p>From 2000 until 2006 (prior to the recession), unemployment ranged from a low of 3.3% in North Carolina and 3.7% in South Carolina, <br />to a high of 6.9% for North Carolina and a high of 7.0% for South Carolina.</p>
+        <p>The rates shown on the map range from an overall low of 2.2% through an overall high of 23.5% during the period from 2006 - 2014.</p> 
+        <p>* Data downloaded from Bureau of Labor Statistics, 2006 - 2014. * </p>
 
-#map_container {
-  width:100%;
-  /*border:2px solid green;*/
-  postion:relative;
-
-
-
-}
-
-#map_info {
-  font-family:Roboto, sans-serif;
-  margin:0px auto;
-  background-color:#fff;
-  color:#555;
-}
-
-#map_info p { line-height: 1.4em; }
-
-#map {
-  width:960px;
-  display:block;
-  margin-left:auto;
-  margin-right:auto;
-  /*border:2px solid red;*/
-  position:relative;
-  
-}
-
-#map_key {
-  float:left;
-  margin-top:50px;
-}
-
-/*button*/
-#animate_map {
-  padding:10px 15px;
-  border-radius:3px;
-  position:absolute;
-  bottom:-26px;
-  left:0px;
-  background-color:#87bc74;
-  color:#fff;
-  font-size:12px;
-
-}
-
-path.counties {
-  fill: #ccc;
-  stroke: #fff;
-  stroke-width: .5px;
-}
-
-path.states {
-  fill: none;
-  stroke:#000;
-  stroke-width: 1px;
-}
-
-#slider {
-  width:650px;
-  margin:0px auto 40px auto;
-  background-color:#888;
-}
-
-</style>
-</head>
-<body>
-  <div id="map_container">
-    
-    
-    <div id="map">
-      <div id="map_info">
-      <h1>d3.js : Unemployment Before and After 2008 Recession</h1>
-      <h2>North and South Carolina, 2006 - 2014</h2>
-      <p>This map shows the unemployment rates for each county for the years before, during, and after the 2008 recession.</p>
-      <p>From 2000 until 2006 (prior to the recession), unemployment ranged from a low of 3.3% in North Carolina and 3.7% in South Carolina, <br />to a high of 6.9% for North Carolina and a high of 7.0% for South Carolina.</p>
-      <p>The rates shown on the map range from an overall low of 2.2% through an overall high of 23.5% during the period from 2006 - 2014.</p> 
-      <p>* Data downloaded from Bureau of Labor Statistics, 2006 - 2014. * </p>
-
-    </div>
-      <div id="map_key">
-        <!-- <img src="/map_key_only.png" /> -->
-        <img src="/map_key_label.png" />
       </div>
-      <button type="button" id="animate_map">ANIMATE DATA</button>
+        <div id="map_key">
+          <!-- <img src="/map_key_only.png" /> -->
+          <img src="/map_key_label.png" />
+        </div>
+        <button type="button" id="animate_map">ANIMATE DATA</button>
+      </div>
+      
+      <div id="slider"></div>
+
     </div>
-    
-    <div id="slider"></div>
 
-  </div>
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+    <script src="http://d3js.org/topojson.v1.min.js"></script>
+    <script src="http://d3js.org/queue.v1.min.js"></script>
+    <script src="js/d3.slider.js"></script>
+    <script src="js/map_custom.js"></script>
 
-<script src="http://d3js.org/d3.v3.min.js"></script>
-<script src="http://d3js.org/topojson.v1.min.js"></script>
-<script src="http://d3js.org/queue.v1.min.js"></script>
-<script src="js/d3.slider.js"></script>
-<script>
-
-var width = 860,
-    height = 500;
-
-var projection = d3.geo.albers()
-    .scale(5000)
-    .translate([ -800, -20]);
-
-// adds threshold-type quantization with 12 2% data ranges and 13 colors
-// refer to http://bl.ocks.org/mbostock/3306362
-var color = d3.scale.threshold()
-    .domain([2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24])
-    .range(['#006400', '#4e8f3e', '#87bc74', '#c0ebac','#ffe6e6','#ffc5d3','#ffa5bc','#f884a3','#ec6588','#db476b','#c62a4c','#ab0f2a','#8b0000']);
-
-var path = d3.geo.path()
-    .projection(projection);
-
-var svg = d3.select("#map").append("svg")
-    .attr("width", width)
-    .attr("height", height);
-
-function convertToYearAndMonth(decimalDate){ 
-  var year = Math.trunc(decimalDate);
-  var month = Math.round((decimalDate - year) * 12) +1;
-  var array = [year, month];
-  return array;
-}
-
-window.yearAndMonth = [2006, 1];
-
-queue()
-    .defer(d3.json, "nc_sc_geo.json")          // The geo data
-    .defer(d3.json, "unemployment_data.json")  // The unemployment data
-    .await(allDataLoaded);
-
-function allDataLoaded(error, topology, unemployment) {
-  window.topology = topology;
-  window.unemployment = unemployment;
-  createMap();
-  redrawMap();
-}
-
-function createMap(){
-  svg.selectAll("path.counties")
-      .data(topojson.feature(topology, topology.objects.counties).features)
-    .enter().append("path")
-    .classed('counties', true)
-      .attr("d", path);
-
-  svg.selectAll("path.states")
-      .data(topojson.feature(topology, topology.objects.states).features)
-    .enter().append("path")
-    .classed('states', true)
-      .attr("d", path);
-}
-
-function redrawMap(){
-
-  function getCountyColor(county) {
-    for(x in unemployment[county.id]){
-      var element = unemployment[county.id][x];
-      if (element.year === window.yearAndMonth[0] && element.month === window.yearAndMonth[1]){
-         return color(element.value);
-      }
-    }
-  }
-  svg.selectAll("path.counties").style("fill", getCountyColor);
-}
-
-d3.select('#slider').call(
-    d3.slider()
-      .axis(true)
-      .min(2006)
-      .max(2014)
-      .step(1.0/12.0)
-      .on("slide", function(evt, value) {
-        window.yearAndMonth = convertToYearAndMonth(value);
-        redrawMap();
-      })
-);
-
-d3.select("#animate_map").on("click", function(evt, value) {
-  window.animationTimer = setInterval(animateStep, 250);
-});
-
-function animateStep(){
-  
-  window.yearAndMonth[1] += 1;
-  if (window.yearAndMonth[1] === 13) {
-    window.yearAndMonth[0] += 1;
-    window.yearAndMonth[1] = 1; 
-  }
-  if (window.yearAndMonth[0] === 2015 && window.yearAndMonth[1] === 1) {
-    console.log("if stmt called");
-    clearInterval(window.animationTimer);
-    return;
-  }
-  redrawMap();
-}
-
-</script>
-</body>
+  </body>
 </html>
